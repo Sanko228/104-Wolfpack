@@ -16,10 +16,9 @@
     --bg-banner-1: #3a4a6a;
     --bg-banner-2: #1a1f30;
     --bg-banner-3: #0a0d15;
-    --logo: url('https://i.imgur.com/8Rw0gRg.png');
   }
 
-  /* ═══ ЖИВОЙ КОСМИЧЕСКИЙ ФОН СТРАНИЦЫ ═══ */
+  /* ═══ ЖИВОЙ КОСМИЧЕСКИЙ ФОН ═══ */
   body::before {
     content: '';
     position: fixed;
@@ -36,8 +35,6 @@
     0%   { transform: translate(0, 0) scale(1); }
     100% { transform: translate(-30px, 20px) scale(1.1); }
   }
-
-  /* звёзды на фоне страницы */
   body::after {
     content: '';
     position: fixed;
@@ -65,25 +62,13 @@
     to   { opacity: 0.9; }
   }
 
-  /* чтобы контент был поверх фона */
   .holo-nav, .marquee-wrap, .sw0-welcome, .sw-page, .site-footer { position: relative; z-index: 2; }
 
-  /* ═══ ЛОГО В НАВБАРЕ ═══ */
-  .nav-logo {
-    position: relative;
-    z-index: 10;
-    width: 42px;
-    height: 42px;
-    object-fit: contain;
-    filter:
-      drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.9))
-      drop-shadow(0 0 18px rgba(var(--accent-rgb), 0.6));
-    animation: logoPulse 3s ease-in-out infinite;
-  }
-  @keyframes logoPulse {
-    0%, 100% { opacity: 0.85; transform: scale(1); }
-    50%      { opacity: 1;    transform: scale(1.08); }
-  }
+  /* ═══ ФИКС ВЫПАДАЮЩИХ МЕНЮ — ПОВЕРХ ВСЕГО ═══ */
+  .holo-nav { z-index: 99999 !important; }
+  .holo-drop { z-index: 99998 !important; position: relative; }
+  .holo-menu { z-index: 99999 !important; pointer-events: auto !important; }
+  .holo-menu a { pointer-events: auto !important; }
 
   /* ═══ БЕГУЩАЯ СТРОКА ═══ */
   .marquee-wrap {
@@ -193,7 +178,6 @@
     to   { background-position: 0 40px; }
   }
 
-  /* HUD-уголки приветствия */
   .sw0-welcome > .corner {
     position: absolute;
     width: 40px;
@@ -218,7 +202,6 @@
 
   .sw0-content { position: relative; z-index: 10; text-align: center; max-width: 900px; margin: 0 auto; }
 
-  /* БОЛЬШОЙ ЛОГОТИП */
   .sw0-logo {
     width: 160px;
     height: 160px;
@@ -359,7 +342,7 @@
     animation: none;
   }
 
-  /* ═══ БЛОКИ — усиленное свечение ═══ */
+  /* ═══ БЛОКИ ═══ */
   .sw-block {
     box-shadow:
       0 0 35px rgba(var(--accent-rgb), 0.4),
@@ -372,7 +355,6 @@
     50%      { box-shadow: 0 0 50px rgba(var(--accent-rgb), 0.7), 0 0 120px rgba(var(--accent-rgb), 0.4), 0 15px 50px rgba(0,0,0,0.7); }
   }
 
-  /* HUD-уголки у блоков */
   .sw-block > .block-corner {
     position: absolute;
     width: 32px;
@@ -390,31 +372,79 @@
   .sw-block > .block-corner.bl { bottom: 6px; left: 6px; border-right: none; border-top: none; }
   .sw-block > .block-corner.br { bottom: 6px; right: 6px; border-left: none; border-top: none; }
 
-  /* ═══ ШАПКА БЛОКА — с логотипами по бокам ═══ */
+  /* ═══ ЗАГОЛОВКИ БЛОКОВ — СЕРЫЙ ГРАДИЕНТ + HUD-УГОЛКИ ═══ */
   .sw-banner {
-    height: 200px;
+    position: relative;
+    height: 160px;
+    background:
+      linear-gradient(135deg,
+        rgba(60, 65, 75, 0.95) 0%,
+        rgba(90, 95, 105, 0.9) 50%,
+        rgba(60, 65, 75, 0.95) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 30px;
+    border-top: 1px solid rgba(200, 200, 210, 0.5);
+    border-bottom: 2px solid rgba(120, 125, 135, 0.7);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-30px);
+    animation: headerDrop 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0.3s forwards;
+    z-index: 6;
+    box-shadow:
+      inset 0 0 40px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
-  .sw-banner-logo {
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-    flex-shrink: 0;
-    filter:
-      drop-shadow(0 0 12px rgba(var(--accent-rgb), 0.9))
-      drop-shadow(0 0 25px rgba(var(--accent-rgb), 0.5));
-    animation: logoPulse 4s ease-in-out infinite;
-    z-index: 3;
+  .sw-banner::before,
+  .sw-banner::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 55px;
+    height: 70%;
+    max-height: 90px;
+    border: 2px solid rgba(210, 215, 225, 0.75);
+    box-shadow: 0 0 12px rgba(200, 210, 230, 0.5);
+    pointer-events: none;
+    animation: hudPulse 3s ease-in-out infinite;
   }
-  .sw-banner h1 {
-    font-size: 3em;
-    letter-spacing: 0.08em;
+  .sw-banner::before {
+    left: 40px;
+    border-right: none;
+  }
+  .sw-banner::after {
+    right: 40px;
+    border-left: none;
+  }
+  @keyframes hudPulse {
+    0%, 100% { opacity: 0.7; }
+    50%      { opacity: 1; }
   }
 
-  /* ═══ КАРТОЧКИ ПОДРАЗДЕЛЕНИЙ — усиленные ═══ */
+  .sw-banner h1 {
+    position: relative;
+    z-index: 3;
+    color: #f0f0f5;
+    font-size: 3em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin: 0;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    text-shadow:
+      0 0 15px rgba(220, 220, 240, 0.9),
+      0 0 30px rgba(150, 160, 200, 0.6),
+      0 0 55px rgba(100, 110, 160, 0.4),
+      2px 2px 8px rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    animation: titleFadeIn 1.2s ease-out 0.7s forwards;
+  }
+  @keyframes titleFadeIn {
+    from { opacity: 0; filter: blur(6px); }
+    to   { opacity: 1; filter: blur(0); }
+  }
+
+  /* ═══ КАРТОЧКИ ПОДРАЗДЕЛЕНИЙ ═══ */
   .sw-emblem {
     transition: box-shadow 0.7s ease, border-color 0.7s ease, background 0.7s ease, transform 0.7s ease;
   }
@@ -451,6 +481,10 @@
       drop-shadow(0 0 35px rgba(var(--accent-rgb), 0.5));
     animation: logoPulse 4s ease-in-out infinite;
   }
+  @keyframes logoPulse {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50%      { opacity: 1;    transform: scale(1.08); }
+  }
   .site-footer-title {
     font-family: 'Georgia', serif;
     font-size: 1.3em;
@@ -485,7 +519,7 @@
     margin: 0;
   }
 
-  /* ═══ Прочее — как было ═══ */
+  /* ═══ Общие стили ═══ */
   .sw-content-block { background: var(--bg-dark); padding: 50px 30px 30px; }
   .sw-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 35px; max-width: 1400px; margin: 0 auto; }
   .sw-card { display: block; text-align: center; text-decoration: none; color: inherit; border-radius: 8px; padding: 10px; transition: transform 0.5s ease; opacity: 0; transform: translateY(40px); animation: cardAppear 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
@@ -503,7 +537,6 @@
   .sw-emblem img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; transition: filter 0.7s ease; }
   .sw-card:hover .sw-emblem img { filter: brightness(1.15) contrast(1.05) saturate(1.1); }
 
-  /* Цвета карточек */
   .sw-card.cerberus:hover .sw-emblem { background: #3d4a5e; border-color: #88b8f0; box-shadow: 0 0 0 3px var(--bg-dark), 0 0 0 5px #6aa8e8, 0 0 35px rgba(120, 190, 255, 1), 0 0 80px rgba(80, 150, 230, 0.7), 0 0 120px rgba(60, 120, 200, 0.5), inset 0 0 25px rgba(140, 200, 255, 0.3); }
   .sw-card.cerberus:hover .sw-company-name { color: #cce4ff; text-shadow: 0 0 15px rgba(160, 210, 255, 1), 0 0 35px rgba(120, 180, 240, 0.9), 0 0 55px rgba(80, 140, 220, 0.7); }
   .sw-card.cerberus:hover .sw-desc { color: #d5e3f0; }
@@ -566,8 +599,7 @@
     .sw-links-grid { grid-template-columns: repeat(2, 1fr); }
     .sw-command-photo { width: 260px; height: 260px; }
     .sw-gallery-wrap { padding: 40px 20px 60px; }
-    .sw-banner { height: 170px; gap: 20px; }
-    .sw-banner-logo { width: 70px; height: 70px; }
+    .sw-banner { height: 140px; }
     .sw-banner h1 { font-size: 2.4em; }
   }
   @media (max-width: 700px) {
@@ -581,11 +613,16 @@
     .sw-command-grid { grid-template-columns: 1fr; gap: 50px; }
     .sw-command-photo { width: 220px; height: 220px; }
     .sw-gallery-wrap { padding: 30px 15px 50px; }
-    .sw-banner { height: 140px; gap: 12px; }
-    .sw-banner-logo { width: 50px; height: 50px; }
-    .sw-banner h1 { font-size: 1.5em; }
+    .sw-banner { height: 120px; }
+    .sw-banner h1 { font-size: 1.7em; letter-spacing: 0.04em; }
+    .sw-banner::before,
+    .sw-banner::after {
+      width: 32px;
+      max-height: 60px;
+    }
+    .sw-banner::before { left: 15px; }
+    .sw-banner::after  { right: 15px; }
     .marquee span { font-size: 0.65em; letter-spacing: 0.25em; }
-    .nav-logo { width: 34px; height: 34px; }
   }
 </style>
 </head>
@@ -593,7 +630,6 @@
 
 <!-- ═══════ НАВИГАЦИЯ ═══════ -->
 <nav class="holo-nav">
-  <img class="nav-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="104">
   <a href="index.html" class="holo-btn active">
     <span class="shine"></span>
     Главная
@@ -682,9 +718,7 @@
       </div>
       <div class="sw-banner">
         <div class="sw-stars"></div>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
         <h1>Информация</h1>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
       </div>
       <div class="sw-info">
         <p><span class="accent">104 батальон "Волчья Стая"</span> — батальон поддержки и спасения Великой армии Республики. Он находился под командованием клона-коммандера Вольфа и генерала Пло Куна.</p>
@@ -702,9 +736,7 @@
     <div class="sw-inner">
       <div class="sw-banner">
         <div class="sw-stars"></div>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
         <h1>Структура Батальона</h1>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
       </div>
       <div class="sw-content-block">
         <div class="sw-grid-4">
@@ -747,9 +779,7 @@
     <div class="sw-inner">
       <div class="sw-banner">
         <div class="sw-stars"></div>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
         <h1>Полезные ссылки</h1>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
       </div>
       <div class="sw-content-block">
         <div class="sw-links-grid">
@@ -760,7 +790,7 @@
           <div class="sw-link-cell"><a class="sw-link-btn" href="https://discord.com/invite/M8aXREVvxD" target="_blank">Дискорд батальона</a></div>
           <div class="sw-link-cell"><a class="sw-link-btn" href="https://www.tiktok.com/@104th.rotr" target="_blank">Тик-ток канал</a></div>
           <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/document/d/1G1KUBi0ssVykhDCRA9dyg7nhg78C1dFol7yTRi0lOHU/edit" target="_blank">Оборона (Тинель)</a></div>
-          <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/document/d/1dQhuq2R7TULbZREyEdJs3E_tQPcd07Vrm_rUgWFrIz8/edit" target="_blank">Оборона (Анаксис)</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/document/d1dQhuq2R7TULbZREyEdJs3E_tQPcd07Vrm_rUgWFrIz8/edit" target="_blank">Оборона (Анаксис)</a></div>
           <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/document/d/1ldOcOWJeDJqrMgm5-sJijzcESy8D8S5lnV5Z7S5e8Os/edit" target="_blank">Оборона (Риши)</a></div>
         </div>
       </div>
@@ -776,9 +806,7 @@
     <div class="sw-inner">
       <div class="sw-banner">
         <div class="sw-stars"></div>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
         <h1>Командование батальона</h1>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
       </div>
       <div class="sw-content-block">
         <div class="sw-command-grid">
@@ -806,9 +834,7 @@
     <div class="sw-inner">
       <div class="sw-banner">
         <div class="sw-stars"></div>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
         <h1>Галерея батальона</h1>
-        <img class="sw-banner-logo" src="https://i.imgur.com/8Rw0gRg.png" alt="">
       </div>
       <div class="sw-gallery-wrap">
         <div class="sw-gallery">
