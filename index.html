@@ -4,1025 +4,368 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>104 Батальон — Волчья Стая</title>
+<link rel="stylesheet" href="style.css">
 <style>
-  /* ═══════════════════════════════════════════════════════════
-     БАЗА
-     ═══════════════════════════════════════════════════════════ */
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: #04080f;
-    font-family: 'Arial', sans-serif;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
+  /* ═══ ЦВЕТА ГЛАВНОЙ — СИНИЕ ═══ */
+  :root {
+    --accent-rgb: 100, 180, 255;
+    --accent-light: #a0c8f5;
+    --accent-bright: #dce8f5;
+    --bg-dark: #313133;
+    --bg-darker: #1a1a1d;
+    --bg-banner-1: #3a4a6a;
+    --bg-banner-2: #1a1f30;
+    --bg-banner-3: #0a0d15;
   }
 
-  /* ═══════════════════════════════════════════════════════════
-     НАВИГАЦИЯ СВЕРХУ
-     ═══════════════════════════════════════════════════════════ */
-  .holo-nav {
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    padding: 18px 30px;
-    background: linear-gradient(180deg, #0a1220 0%, #04080f 100%);
-    border-bottom: 1px solid rgba(100, 190, 255, 0.3);
-    box-shadow:
-      inset 0 0 30px rgba(40, 120, 220, 0.25),
-      0 0 20px rgba(60, 150, 255, 0.2);
-  }
-  .holo-nav::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(80, 180, 255, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(80, 180, 255, 0.06) 1px, transparent 1px);
-    background-size: 30px 30px;
-    pointer-events: none;
-    animation: navGridShift 20s linear infinite;
-  }
-  @keyframes navGridShift {
-    from { background-position: 0 0, 0 0; }
-    to   { background-position: 30px 30px, 30px 30px; }
-  }
-
-  .holo-btn {
+  /* ═══ ПРИВЕТСТВЕННОЕ ОКНО ═══ */
+  .sw0-welcome {
     position: relative;
-    z-index: 10;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px 28px;
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: 0.95em;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #c8e8ff;
-    background: linear-gradient(180deg,
-      rgba(20, 45, 90, 0.85) 0%,
-      rgba(10, 25, 55, 0.9) 50%,
-      rgba(20, 45, 90, 0.85) 100%);
-    border: 1.5px solid rgba(100, 190, 255, 0.55);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.35s ease;
-    box-shadow:
-      inset 0 0 15px rgba(60, 150, 255, 0.25),
-      0 0 12px rgba(60, 150, 255, 0.35);
-    text-shadow: 0 0 8px rgba(120, 200, 255, 0.8);
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .holo-btn::before,
-  .holo-btn::after {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border: 1.5px solid #9ed4ff;
-    pointer-events: none;
-    transition: all 0.35s ease;
-  }
-  .holo-btn::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-  .holo-btn::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-
-  .holo-btn .shine {
-    position: absolute;
-    top: 0; left: -100%;
-    width: 60%; height: 100%;
-    background: linear-gradient(115deg, transparent 0%, rgba(160, 220, 255, 0.35) 50%, transparent 100%);
-    transform: skewX(-20deg);
-    transition: left 0.7s ease;
-    pointer-events: none;
-  }
-  .holo-btn:hover .shine { left: 130%; }
-
-  .holo-btn:hover {
-    color: #fff;
-    border-color: #7cc4ff;
-    background: linear-gradient(180deg,
-      rgba(30, 70, 140, 0.95) 0%,
-      rgba(15, 40, 90, 0.95) 50%,
-      rgba(30, 70, 140, 0.95) 100%);
-    box-shadow:
-      inset 0 0 25px rgba(90, 180, 255, 0.5),
-      0 0 25px rgba(100, 190, 255, 0.8),
-      0 0 55px rgba(60, 150, 250, 0.5);
-    text-shadow: 0 0 12px rgba(180, 230, 255, 1);
-    transform: translateY(-2px);
-  }
-  .holo-btn:hover::before,
-  .holo-btn:hover::after { width: 18px; height: 18px; border-color: #b0e0ff; }
-
-  .holo-btn.active {
-    color: #fff;
-    border-color: #b0e0ff;
-    background: linear-gradient(180deg,
-      rgba(50, 110, 190, 0.9) 0%,
-      rgba(20, 60, 130, 0.95) 50%,
-      rgba(50, 110, 190, 0.9) 100%);
-    box-shadow:
-      inset 0 0 30px rgba(120, 200, 255, 0.55),
-      0 0 30px rgba(120, 200, 255, 0.85),
-      0 0 70px rgba(60, 150, 250, 0.5);
-  }
-
-  /* ВЫПАДАЮЩИЕ МЕНЮ */
-  .holo-drop {
-    position: relative;
-    z-index: 10;
-    display: inline-block;
-  }
-  .holo-drop > .holo-btn .arrow {
-    display: inline-block;
-    font-size: 0.7em;
-    margin-left: 4px;
-    transition: transform 0.3s ease;
-  }
-  .holo-drop:hover > .holo-btn .arrow { transform: rotate(180deg); }
-
-  .holo-menu {
-    position: absolute;
-    top: calc(100% + 12px);
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
-    min-width: 300px;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: linear-gradient(180deg,
-      rgba(10, 25, 55, 0.98) 0%,
-      rgba(4, 8, 15, 0.98) 100%);
-    border: 1.5px solid rgba(100, 190, 255, 0.55);
-    border-radius: 8px;
-    box-shadow:
-      inset 0 0 25px rgba(60, 150, 255, 0.2),
-      0 0 25px rgba(60, 150, 255, 0.45),
-      0 0 60px rgba(30, 100, 200, 0.3);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-    z-index: 100;
-  }
-  .holo-menu::before {
-    content: '';
-    position: absolute;
-    top: -14px;
-    left: 0; right: 0;
-    height: 14px;
-  }
-  .holo-drop:hover .holo-menu {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
-  }
-  .holo-menu a {
-    position: relative;
-    display: block;
-    padding: 11px 20px;
-    font-family: 'Georgia', serif;
-    font-size: 0.85em;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #b8d8f8;
-    background: linear-gradient(180deg,
-      rgba(15, 35, 70, 0.7) 0%,
-      rgba(8, 18, 40, 0.9) 100%);
-    border: 1px solid rgba(90, 170, 240, 0.35);
-    border-radius: 5px;
-    box-shadow: inset 0 0 12px rgba(60, 150, 255, 0.15);
-    text-shadow: 0 0 6px rgba(120, 200, 255, 0.6);
-    transition: all 0.3s ease;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .holo-menu a:hover {
-    color: #fff;
-    border-color: #7cc4ff;
-    background: linear-gradient(180deg,
-      rgba(30, 70, 140, 0.95) 0%,
-      rgba(15, 40, 90, 0.95) 100%);
-    box-shadow:
-      inset 0 0 18px rgba(90, 180, 255, 0.4),
-      0 0 18px rgba(100, 190, 255, 0.7);
-    text-shadow: 0 0 10px rgba(180, 230, 255, 1);
-    transform: translateX(4px);
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ 5 БЛОКОВ
-     ═══════════════════════════════════════════════════════════ */
-  .sw-page {
-    padding: 30px 20px;
-  }
-
-  .sw-block {
-    position: relative;
-    border-radius: 0;
-    overflow: hidden;
-    background: #313133;
-    width: 100%;
     max-width: 1500px;
-    margin: 0 auto 40px;
-    padding: 4px;
+    margin: 30px auto 40px;
+    padding: 60px 50px;
+    background:
+      radial-gradient(ellipse 800px 300px at 50% 0%, rgba(var(--accent-rgb), 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 700px 400px at 50% 100%, rgba(var(--accent-rgb), 0.1) 0%, transparent 70%),
+      linear-gradient(180deg, #0a1425 0%, #060c18 50%, #0a1425 100%);
+    border: 2px solid rgba(var(--accent-rgb), 0.7);
+    overflow: hidden;
     box-shadow:
-      0 0 25px rgba(100, 180, 255, 0.35),
-      0 0 60px rgba(70, 140, 220, 0.2),
+      inset 0 0 40px rgba(var(--accent-rgb), 0.35),
+      0 0 30px rgba(var(--accent-rgb), 0.5),
+      0 0 80px rgba(var(--accent-rgb), 0.3),
       0 10px 40px rgba(0,0,0,0.6);
     opacity: 0;
     animation: blockFadeIn 1.2s ease-out 0.1s forwards;
   }
-  @keyframes blockFadeIn {
-    from { opacity: 0; transform: scale(0.98); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-
-  .sw-block::before {
+  .sw0-welcome::before {
     content: '';
     position: absolute;
     inset: 0;
-    border: 2px solid rgba(120, 190, 255, 0.85);
-    box-shadow:
-      inset 0 0 15px rgba(100, 180, 255, 0.5),
-      inset 0 0 30px rgba(70, 140, 220, 0.25),
-      0 0 15px rgba(120, 190, 255, 0.7),
-      0 0 35px rgba(80, 150, 230, 0.4);
-    animation: holoFrame 3s ease-in-out infinite, holoGlitch 6s steps(2) infinite;
+    background-image:
+      linear-gradient(rgba(var(--accent-rgb), 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--accent-rgb), 0.07) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
-    z-index: 20;
+    animation: gridShift 20s linear infinite;
+    z-index: 1;
   }
-  .sw-block::after {
+  @keyframes gridShift {
+    from { background-position: 0 0, 0 0; }
+    to   { background-position: 40px 40px, 40px 40px; }
+  }
+  .sw0-welcome::after {
     content: '';
     position: absolute;
-    inset: 5px;
-    border: 1px solid rgba(140, 200, 255, 0.4);
-    box-shadow: inset 0 0 8px rgba(120, 190, 255, 0.3);
-    animation: holoFrameInner 4s ease-in-out infinite;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+      rgba(var(--accent-rgb), 0.05) 0px,
+      rgba(var(--accent-rgb), 0.05) 1px,
+      transparent 1px, transparent 3px);
     pointer-events: none;
-    z-index: 19;
-  }
-  @keyframes holoFrame {
-    0%, 100% {
-      border-color: rgba(120, 190, 255, 0.7);
-      box-shadow: inset 0 0 15px rgba(100, 180, 255, 0.4),
-                  inset 0 0 30px rgba(70, 140, 220, 0.2),
-                  0 0 12px rgba(120, 190, 255, 0.5),
-                  0 0 25px rgba(80, 150, 230, 0.3);
-    }
-    50% {
-      border-color: rgba(160, 220, 255, 1);
-      box-shadow: inset 0 0 25px rgba(140, 210, 255, 0.7),
-                  inset 0 0 50px rgba(90, 160, 240, 0.4),
-                  0 0 25px rgba(160, 220, 255, 0.9),
-                  0 0 55px rgba(100, 180, 255, 0.6),
-                  0 0 90px rgba(70, 140, 220, 0.3);
-    }
-  }
-  @keyframes holoFrameInner {
-    0%, 100% { border-color: rgba(140, 200, 255, 0.3); }
-    50%      { border-color: rgba(140, 200, 255, 0.7); }
-  }
-  @keyframes holoGlitch {
-    0%, 88%, 100% { transform: translate(0, 0); }
-    90%           { transform: translate(-1px, 1px); }
-    92%           { transform: translate(1px, -1px); }
-    94%           { transform: translate(-1px, -1px); }
-    96%           { transform: translate(1px, 1px); }
-  }
-
-  .sw-inner {
-    position: relative;
-    overflow: hidden;
-    background: #313133;
     z-index: 2;
+    animation: scanMove 8s linear infinite;
   }
-
-  /* Общая шапка для блоков 2, 3, 4, 5 */
-  .sw-header {
-    position: relative;
-    height: 160px;
-    background: linear-gradient(135deg, #1a1a1d 0%, #2d2d31 50%, #1a1a1d 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 2px solid #454549;
-    overflow: hidden;
+  @keyframes scanMove {
+    from { background-position: 0 0; }
+    to   { background-position: 0 40px; }
   }
-  .sw-stars {
-    position: absolute; inset: 0;
-    background-image:
-      radial-gradient(1px 1px at 20% 30%, #fff, transparent),
-      radial-gradient(1px 1px at 60% 70%, #fff, transparent),
-      radial-gradient(1px 1px at 80% 20%, #ddd, transparent),
-      radial-gradient(1px 1px at 40% 80%, #fff, transparent),
-      radial-gradient(1px 1px at 90% 60%, #ccc, transparent),
-      radial-gradient(1px 1px at 10% 90%, #fff, transparent);
-    background-size: 200px 200px;
-    animation: starsTwinkle 6s ease-in-out infinite alternate;
-    opacity: 0.7;
-    pointer-events: none;
-  }
-  @keyframes starsTwinkle {
-    from { opacity: 0.4; }
-    to   { opacity: 0.9; }
-  }
-  .sw-header h1 {
-    position: relative;
-    z-index: 3;
-    color: #e8e8e8;
-    font-size: 3em;
-    font-weight: 900;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin: 0;
-    text-shadow: 2px 2px 8px #000, 0 0 20px rgba(0,0,0,0.8);
-    font-family: 'Impact', 'Arial Black', sans-serif;
-    animation: titleGlow 5s ease-in-out infinite;
-  }
-  @keyframes titleGlow {
-    0%, 100% { text-shadow: 2px 2px 8px #000, 0 0 20px rgba(200,200,200,0.3); }
-    50%      { text-shadow: 2px 2px 8px #000, 0 0 35px rgba(220,220,220,0.7); }
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     БЛОК 1 — ИНФОРМАЦИЯ
-     ═══════════════════════════════════════════════════════════ */
-  .sw1-ash {
+  .sw0-welcome > .corner {
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
+    width: 28px;
+    height: 28px;
+    border: 2px solid rgb(var(--accent-rgb));
+    box-shadow: 0 0 15px rgba(var(--accent-rgb), 1);
     z-index: 5;
-  }
-  .sw1-ash-particle {
-    position: absolute;
-    top: -10px;
-    width: 3px; height: 3px;
-    background: rgba(200, 220, 240, 0.8);
-    border-radius: 50%;
-    box-shadow: 0 0 4px rgba(180, 210, 255, 0.8), 0 0 8px rgba(140, 180, 240, 0.5);
-    animation: ashFall linear infinite;
-    opacity: 0;
-  }
-  .sw1-ash-particle:nth-child(1)  { left: 5%;  animation-duration: 14s; animation-delay: 0s;    }
-  .sw1-ash-particle:nth-child(2)  { left: 12%; animation-duration: 18s; animation-delay: 1.5s;  }
-  .sw1-ash-particle:nth-child(3)  { left: 18%; animation-duration: 12s; animation-delay: 3s;    }
-  .sw1-ash-particle:nth-child(4)  { left: 24%; animation-duration: 16s; animation-delay: 2s;    }
-  .sw1-ash-particle:nth-child(5)  { left: 31%; animation-duration: 20s; animation-delay: 4s;    }
-  .sw1-ash-particle:nth-child(6)  { left: 38%; animation-duration: 13s; animation-delay: 0.5s;  }
-  .sw1-ash-particle:nth-child(7)  { left: 45%; animation-duration: 17s; animation-delay: 2.5s;  }
-  .sw1-ash-particle:nth-child(8)  { left: 52%; animation-duration: 15s; animation-delay: 5s;    }
-  .sw1-ash-particle:nth-child(9)  { left: 58%; animation-duration: 19s; animation-delay: 1s;    }
-  .sw1-ash-particle:nth-child(10) { left: 65%; animation-duration: 13s; animation-delay: 3.5s;  }
-  .sw1-ash-particle:nth-child(11) { left: 72%; animation-duration: 16s; animation-delay: 0.8s;  }
-  .sw1-ash-particle:nth-child(12) { left: 79%; animation-duration: 14s; animation-delay: 2.2s;  }
-  .sw1-ash-particle:nth-child(13) { left: 85%; animation-duration: 18s; animation-delay: 4.5s;  }
-  .sw1-ash-particle:nth-child(14) { left: 91%; animation-duration: 12s; animation-delay: 1.2s;  }
-  .sw1-ash-particle:nth-child(15) { left: 96%; animation-duration: 20s; animation-delay: 3.8s;  }
-  @keyframes ashFall {
-    0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 0.7; }
-    100% { transform: translateY(120vh) translateX(20px) rotate(360deg); opacity: 0; }
-  }
-
-  .sw1-header {
-    position: relative;
-    height: 200px;
-    background: radial-gradient(ellipse at bottom, #3a3a3f 0%, #1a1a1d 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 2px solid #6a6a6a;
-    overflow: hidden;
-  }
-  .sw1-stars {
-    position: absolute; inset: 0;
-    background-image:
-      radial-gradient(1px 1px at 20% 30%, #cce0ff, transparent),
-      radial-gradient(1px 1px at 60% 70%, #a8c8f0, transparent),
-      radial-gradient(1px 1px at 80% 20%, #99bbdd, transparent),
-      radial-gradient(1px 1px at 40% 80%, #dde8ff, transparent),
-      radial-gradient(1px 1px at 90% 60%, #88aacc, transparent),
-      radial-gradient(1px 1px at 10% 90%, #cce0ff, transparent);
-    background-size: 200px 200px;
-    animation: starsTwinkle 6s ease-in-out infinite alternate;
-    opacity: 0.85;
     pointer-events: none;
   }
-  .sw1-header h1 {
-    position: relative;
-    z-index: 3;
-    color: #dce8f5;
-    font-size: 3.2em;
-    font-weight: 900;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin: 0;
-    text-shadow: 0 0 20px #a0c8f0, 0 0 40px #7090c0, 0 0 70px #506080;
-    font-family: 'Impact', 'Arial Black', sans-serif;
-  }
-  .sw1-info {
-    background: #313133;
-    padding: 60px 50px 40px;
-    max-width: 1400px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 3;
-  }
-  .sw1-info p {
-    color: #d0d0d0;
-    font-size: 1.15em;
-    line-height: 1.9;
-    margin: 0 0 20px 0;
-    letter-spacing: 0.02em;
-    text-shadow: 0 0 8px rgba(180, 180, 180, 0.3);
-  }
-  .sw1-info .accent {
-    color: #fff;
-    font-weight: bold;
-    text-shadow: 0 0 10px #fff, 0 0 20px #c0c0c0, 0 0 30px #808080;
-    letter-spacing: 0.03em;
-  }
-  .sw1-crawl {
-    background: #1a1d28;
-    padding: 25px 20px;
-    margin: 0 40px 40px;
-    border: 2px solid #4a6080;
-    border-radius: 14px;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 0 15px rgba(80, 140, 220, 0.25), inset 0 0 15px rgba(80, 140, 220, 0.1);
-    z-index: 3;
-  }
-  .sw1-crawl-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .sw1-crawl-icon {
-    width: 42px; height: 42px;
-    object-fit: contain;
-    filter: drop-shadow(0 0 8px rgba(140, 200, 255, 0.8)) drop-shadow(0 0 16px rgba(100, 160, 230, 0.5));
-    animation: iconPulse 4s ease-in-out infinite;
-    flex-shrink: 0;
-  }
-  @keyframes iconPulse {
-    0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 6px rgba(140, 200, 255, 0.5)); }
-    50%      { opacity: 1; filter: drop-shadow(0 0 12px rgba(180, 220, 255, 1)) drop-shadow(0 0 25px rgba(120, 180, 240, 0.7)); }
-  }
-  .sw1-crawl-text {
-    color: #c0dcff;
-    font-size: 1em;
+  .sw0-welcome > .corner.tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+  .sw0-welcome > .corner.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+  .sw0-welcome > .corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+  .sw0-welcome > .corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+  .sw0-content { position: relative; z-index: 10; text-align: center; max-width: 900px; margin: 0 auto; }
+  .sw0-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75em;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    font-family: 'Impact', sans-serif;
-    animation: crawlFade 4s ease-in-out infinite;
-    text-shadow: 0 0 15px #90b8e8, 0 0 30px #6080b0;
-    margin: 0;
+    color: var(--accent-light);
+    border: 1px solid rgba(var(--accent-rgb), 0.6);
+    border-radius: 20px;
+    background: rgba(var(--accent-rgb), 0.15);
+    margin-bottom: 25px;
+    text-shadow: 0 0 12px rgba(var(--accent-rgb), 0.9);
+    animation: badgeFlicker 4s ease-in-out infinite;
   }
-  @keyframes crawlFade {
-    0%, 100% { opacity: 0.5; }
+  @keyframes badgeFlicker {
+    0%, 100% { opacity: 0.85; }
     50%      { opacity: 1; }
   }
-  .sw1-bottom-img {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 40px 50px;
-    position: relative;
-    z-index: 3;
-  }
-  .sw1-bottom-img img {
-    max-width: 100%;
-    width: auto;
-    max-height: 400px;
-    object-fit: contain;
-    animation: bottomImgGlow 4s ease-in-out infinite;
-  }
-  @keyframes bottomImgGlow {
-    0%, 100% { filter: drop-shadow(0 0 20px rgba(120, 190, 255, 0.6)) drop-shadow(0 0 50px rgba(80, 140, 220, 0.4)); }
-    50%      { filter: drop-shadow(0 0 30px rgba(160, 210, 255, 0.9)) drop-shadow(0 0 70px rgba(120, 180, 240, 0.6)); }
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     БЛОК 2 — СТРУКТУРА БАТАЛЬОНА
-     ═══════════════════════════════════════════════════════════ */
-  .sw2-content { background: #313133; padding: 50px 30px 30px; }
-  .sw2-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 35px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .sw2-card {
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    border-radius: 8px;
-    padding: 10px;
-    transition: transform 0.5s ease;
-    cursor: pointer;
-  }
-  .sw2-card:hover { transform: translateY(-5px); }
-
-  .sw2-emblem {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 30px;
-    border-radius: 50%;
-    background: #454549;
-    border: 6px solid #2a2a2e;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: 0 0 0 3px #313133, 0 0 0 5px #55555a, inset 0 0 20px rgba(0,0,0,0.5);
-    overflow: hidden;
-    transition: box-shadow 0.7s ease, border-color 0.7s ease, background 0.7s ease;
-  }
-  .sw2-emblem img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    transition: filter 0.7s ease;
-  }
-  .sw2-card:hover .sw2-emblem img { filter: brightness(1.15) contrast(1.05) saturate(1.1); }
-
-  .sw2-card.cerberus:hover .sw2-emblem {
-    background: #3d4a5e; border-color: #88b8f0;
-    box-shadow: 0 0 0 3px #313133, 0 0 0 5px #6aa8e8,
-                0 0 25px rgba(120, 190, 255, 0.9),
-                0 0 60px rgba(80, 150, 230, 0.65),
-                0 0 100px rgba(60, 120, 200, 0.45),
-                inset 0 0 20px rgba(140, 200, 255, 0.2);
-  }
-  .sw2-card.cerberus:hover .sw2-company-name {
-    color: #cce4ff;
-    text-shadow: 0 0 10px rgba(160, 210, 255, 1), 0 0 25px rgba(120, 180, 240, 0.85);
-  }
-  .sw2-card.fenrir:hover .sw2-emblem {
-    background: #3a5040; border-color: #88e8a8;
-    box-shadow: 0 0 0 3px #313133, 0 0 0 5px #6ae890,
-                0 0 25px rgba(120, 255, 170, 0.9),
-                0 0 60px rgba(80, 230, 140, 0.65),
-                0 0 100px rgba(60, 200, 110, 0.45),
-                inset 0 0 20px rgba(140, 255, 180, 0.2);
-  }
-  .sw2-card.fenrir:hover .sw2-company-name {
-    color: #ccffdc;
-    text-shadow: 0 0 10px rgba(160, 255, 200, 1), 0 0 25px rgba(120, 240, 170, 0.85);
-  }
-  .sw2-card.moon:hover .sw2-emblem {
-    background: #4a3d5e; border-color: #b888f0;
-    box-shadow: 0 0 0 3px #313133, 0 0 0 5px #a86ae8,
-                0 0 25px rgba(190, 120, 255, 0.9),
-                0 0 60px rgba(150, 80, 230, 0.65),
-                0 0 100px rgba(120, 60, 200, 0.45),
-                inset 0 0 20px rgba(200, 140, 255, 0.2);
-  }
-  .sw2-card.moon:hover .sw2-company-name {
-    color: #e4ccff;
-    text-shadow: 0 0 10px rgba(210, 160, 255, 1), 0 0 25px rgba(180, 120, 240, 0.85);
-  }
-  .sw2-card.hunter:hover .sw2-emblem {
-    background: #5e503d; border-color: #f0d888;
-    box-shadow: 0 0 0 3px #313133, 0 0 0 5px #e8c86a,
-                0 0 25px rgba(255, 230, 120, 0.9),
-                0 0 60px rgba(230, 200, 80, 0.65),
-                0 0 100px rgba(200, 170, 60, 0.45),
-                inset 0 0 20px rgba(255, 240, 140, 0.2);
-  }
-  .sw2-card.hunter:hover .sw2-company-name {
-    color: #fff4cc;
-    text-shadow: 0 0 10px rgba(255, 240, 160, 1), 0 0 25px rgba(240, 220, 120, 0.85);
-  }
-
-  .sw2-company-name {
-    color: #e0e0e0;
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    letter-spacing: 0.03em;
-    transition: color 0.6s ease, text-shadow 0.6s ease;
-  }
-  .sw2-desc {
-    color: #b0b0b0;
-    font-size: 0.95em;
-    line-height: 1.7;
-    text-align: left;
-    padding: 0 5px;
-    transition: color 0.6s ease;
-  }
-  .sw2-note {
-    background: #313133;
-    padding: 20px 30px 60px;
-    text-align: center;
-  }
-  .sw2-note p {
-    display: inline-block;
-    color: #d0e4ff;
-    font-size: 1.15em;
-    font-weight: bold;
+  .sw0-title {
+    margin: 0 0 20px 0;
+    font-family: 'Georgia', serif;
+    font-size: 3em;
+    font-weight: 700;
     letter-spacing: 0.08em;
-    margin: 0;
-    padding: 18px 40px;
-    border: 1px solid #4a6080;
-    border-radius: 6px;
-    background: rgba(60, 90, 140, 0.35);
-    text-shadow: 0 0 12px rgba(140, 200, 255, 0.6);
-    animation: notePulse 3.5s ease-in-out infinite;
+    color: var(--accent-bright);
+    text-shadow:
+      0 0 12px rgba(var(--accent-rgb), 1),
+      0 0 30px rgba(var(--accent-rgb), 0.9),
+      0 0 60px rgba(var(--accent-rgb), 0.7),
+      0 0 100px rgba(var(--accent-rgb), 0.5);
+    animation: welcomePulse 4s ease-in-out infinite;
   }
-  @keyframes notePulse {
+  @keyframes welcomePulse {
     0%, 100% {
-      opacity: 0.6;
-      text-shadow: 0 0 6px rgba(140, 200, 255, 0.25);
-      border-color: #3a4a60;
-      box-shadow: 0 0 0 rgba(120, 190, 255, 0);
+      text-shadow:
+        0 0 12px rgba(var(--accent-rgb), 1),
+        0 0 30px rgba(var(--accent-rgb), 0.9),
+        0 0 60px rgba(var(--accent-rgb), 0.7);
     }
     50% {
-      opacity: 1;
-      text-shadow: 0 0 20px rgba(180, 220, 255, 1), 0 0 45px rgba(140, 190, 250, 0.7);
-      border-color: #90b8e8;
-      box-shadow: 0 0 25px rgba(120, 190, 255, 0.5), 0 0 50px rgba(80, 150, 230, 0.3);
+      text-shadow:
+        0 0 20px rgba(var(--accent-rgb), 1),
+        0 0 45px rgba(var(--accent-rgb), 1),
+        0 0 90px rgba(var(--accent-rgb), 0.9);
     }
   }
-
-  /* ═══════════════════════════════════════════════════════════
-     БЛОК 3 — ПОЛЕЗНЫЕ ССЫЛКИ
-     ═══════════════════════════════════════════════════════════ */
-  .sw3-links {
-    background: #313133;
-    padding: 40px 30px 60px;
-    width: 100%;
+  .sw0-subtitle {
+    margin: 0 0 35px 0;
+    font-size: 1em;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(var(--accent-rgb), 0.9);
+    text-shadow: 0 0 12px rgba(var(--accent-rgb), 0.8);
   }
-  .sw3-links-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-  }
-  .sw3-link-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 35px 20px;
-    border-bottom: 1px solid #45454a;
-    position: relative;
-  }
-  .sw3-link-cell:nth-child(n+7) { border-bottom: none; }
-  .sw3-link-cell:not(:nth-child(3n))::after {
-    content: '';
-    position: absolute;
-    right: 0; top: 25%;
-    height: 50%; width: 1px;
-    background: #45454a;
-  }
-  .sw3-link-btn {
-    display: inline-block;
-    padding: 12px 28px;
-    background: rgba(50, 65, 95, 0.6);
-    color: #dce8f5;
-    text-decoration: none;
-    font-family: 'Arial', sans-serif;
-    font-size: 0.95em;
-    font-weight: 600;
+  .sw0-text {
+    margin: 0 0 40px 0;
+    font-size: 1.1em;
+    line-height: 1.85;
+    color: #c8ddf0;
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.4);
     letter-spacing: 0.02em;
-    border-radius: 4px;
-    border: 2px solid rgba(120, 190, 255, 0.5);
-    transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-    box-shadow: 0 0 12px rgba(100, 180, 255, 0.2), inset 0 0 12px rgba(100, 180, 255, 0.05);
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
   }
-  .sw3-link-btn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(200, 230, 255, 0.5), transparent);
-    transition: left 0.7s ease;
-  }
-  .sw3-link-btn:hover {
-    background: rgba(120, 190, 255, 0.95);
-    color: #1a1d28;
-    border-color: #cce0ff;
-    box-shadow:
-      0 0 20px rgba(160, 210, 255, 0.9),
-      0 0 45px rgba(120, 180, 240, 0.7),
-      0 0 80px rgba(80, 140, 220, 0.5),
-      inset 0 0 15px rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-  }
-  .sw3-link-btn:hover::before { left: 100%; }
-
-  /* ═══════════════════════════════════════════════════════════
-     БЛОК 4 — КОМАНДОВАНИЕ
-     ═══════════════════════════════════════════════════════════ */
-  .sw4-content {
-    background: #313133;
-    padding: 60px 40px 80px;
-    width: 100%;
-  }
-  .sw4-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 60px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .sw4-card { text-align: center; }
-  .sw4-photo {
-    width: 320px; height: 320px;
-    margin: 0 auto 35px;
-    border-radius: 50%;
-    background: #454549;
-    border: 8px solid #2a2a2e;
-    position: relative;
-    overflow: hidden;
-    box-shadow:
-      0 0 0 3px #313133,
-      0 0 0 6px #55555a,
-      0 8px 30px rgba(0,0,0,0.7),
-      inset 0 0 40px rgba(0,0,0,0.5);
-    transition: box-shadow 0.7s ease, border-color 0.7s ease;
-  }
-  .sw4-card:hover .sw4-photo {
-    border-color: #88b8f0;
-    box-shadow:
-      0 0 0 3px #313133,
-      0 0 0 6px #6aa8e8,
-      0 0 30px rgba(120, 190, 255, 0.85),
-      0 0 70px rgba(80, 150, 230, 0.6),
-      0 0 110px rgba(60, 120, 200, 0.4),
-      0 8px 30px rgba(0,0,0,0.7);
-  }
-  .sw4-photo img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center 20%;
-    display: block;
-    transition: filter 0.7s ease, transform 0.7s ease;
-    filter: brightness(0.95) contrast(1.05);
-  }
-  .sw4-card:hover .sw4-photo img {
-    filter: brightness(1.15) contrast(1.1) saturate(1.05);
-    transform: scale(1.05);
-  }
-  .sw4-name {
-    color: #e8e8e8;
-    font-size: 1.6em;
-    font-weight: 600;
-    margin-bottom: 25px;
-    letter-spacing: 0.04em;
-    font-family: 'Georgia', 'Times New Roman', serif;
-    text-shadow: 0 0 15px rgba(200, 200, 200, 0.4);
-    transition: color 0.6s ease, text-shadow 0.6s ease;
-  }
-  .sw4-card:hover .sw4-name {
-    color: #cce4ff;
+  .sw0-text .accent {
+    color: #ffffff;
+    font-weight: bold;
     text-shadow:
-      0 0 10px rgba(160, 210, 255, 1),
-      0 0 25px rgba(120, 180, 240, 0.85),
-      0 0 45px rgba(80, 140, 220, 0.6);
+      0 0 12px rgba(var(--accent-rgb), 1),
+      0 0 25px rgba(var(--accent-rgb), 0.9);
   }
-  .sw4-bio {
-    color: #c0c0c0;
-    font-size: 0.98em;
-    line-height: 1.75;
-    text-align: left;
-    padding: 0 20px;
-    transition: color 0.6s ease;
-  }
-  .sw4-card:hover .sw4-bio { color: #d5e3f0; }
-
-  /* ═══════════════════════════════════════════════════════════
-     БЛОК 5 — ГАЛЕРЕЯ
-     ═══════════════════════════════════════════════════════════ */
-  .sw5-carousel-wrap {
-    background: #313133;
-    padding: 60px 40px 80px;
-    width: 100%;
-  }
-  .sw5-carousel {
-    max-width: 1000px;
-    margin: 0 auto;
-    position: relative;
-  }
-  .sw5-stage {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    border-radius: 20px;
-    overflow: hidden;
-    background: #1a1a1d;
-    border: 3px solid #2e3450;
-    box-shadow:
-      0 0 0 3px #313133,
-      0 0 0 6px #4a5578,
-      0 10px 40px rgba(0,0,0,0.8),
-      0 0 25px rgba(100, 180, 255, 0.2);
-    transition: box-shadow 0.7s ease, border-color 0.7s ease;
-  }
-  .sw5-carousel:hover .sw5-stage {
-    border-color: #88a8cc;
-    box-shadow:
-      0 0 0 3px #313133,
-      0 0 0 6px #6a80a8,
-      0 0 30px rgba(150, 200, 255, 0.6),
-      0 0 70px rgba(100, 160, 220, 0.4),
-      0 10px 40px rgba(0,0,0,0.8);
-  }
-  .sw5-stage img {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-    display: block;
-    border-radius: 17px;
-  }
-  .sw5-stage img.active { opacity: 1; }
-
-  .sw5-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin-top: 35px;
-    flex-wrap: wrap;
-  }
-  .sw5-btn {
+  .sw0-actions { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .sw0-btn {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 36px;
-    background: rgba(50, 65, 95, 0.6);
-    color: #dce8f5;
-    font-family: 'Arial', sans-serif;
+    padding: 15px 40px;
+    font-family: 'Georgia', serif;
     font-size: 1em;
-    font-weight: 600;
-    letter-spacing: 0.1em;
+    font-weight: 700;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    border: 2px solid rgba(120, 190, 255, 0.5);
+    text-decoration: none;
+    color: var(--accent-bright);
+    background: linear-gradient(180deg,
+      rgba(var(--accent-rgb), 0.4) 0%,
+      rgba(var(--accent-rgb), 0.15) 100%);
+    border: 2px solid rgba(var(--accent-rgb), 0.65);
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    box-shadow: 0 0 12px rgba(100, 180, 255, 0.2), inset 0 0 12px rgba(100, 180, 255, 0.05);
+    box-shadow:
+      inset 0 0 20px rgba(var(--accent-rgb), 0.3),
+      0 0 20px rgba(var(--accent-rgb), 0.5);
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.9);
     position: relative;
     overflow: hidden;
-    user-select: none;
+    white-space: nowrap;
   }
-  .sw5-btn::before {
+  .sw0-btn::before {
     content: '';
     position: absolute;
     top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(200, 230, 255, 0.4), transparent);
+    width: 60%; height: 100%;
+    background: linear-gradient(115deg, transparent 0%, rgba(var(--accent-rgb), 0.5) 50%, transparent 100%);
+    transform: skewX(-20deg);
     transition: left 0.7s ease;
   }
-  .sw5-btn:hover {
-    background: rgba(120, 190, 255, 0.95);
-    color: #1a1d28;
-    border-color: #cce0ff;
+  .sw0-btn:hover::before { left: 130%; }
+  .sw0-btn:hover {
+    color: #ffffff;
+    border-color: rgb(var(--accent-rgb));
+    background: linear-gradient(180deg,
+      rgba(var(--accent-rgb), 0.6) 0%,
+      rgba(var(--accent-rgb), 0.35) 100%);
     box-shadow:
-      0 0 20px rgba(160, 210, 255, 0.8),
-      0 0 45px rgba(120, 180, 240, 0.5),
-      inset 0 0 15px rgba(255, 255, 255, 0.3);
+      inset 0 0 30px rgba(var(--accent-rgb), 0.6),
+      0 0 35px rgba(var(--accent-rgb), 1),
+      0 0 80px rgba(var(--accent-rgb), 0.7);
+    transform: translateY(-3px);
+  }
+
+  /* ═══ БЛОКИ (информация, структура, ссылки, командование, галерея) ═══ */
+  .sw-content-block { background: var(--bg-dark); padding: 50px 30px 30px; }
+  .sw-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 35px; max-width: 1400px; margin: 0 auto; }
+  .sw-card-link { display: block; text-align: center; text-decoration: none; color: inherit; border-radius: 8px; padding: 10px; transition: transform 0.5s ease; }
+  .sw-card-link:hover { transform: translateY(-5px); }
+  .sw-emblem {
+    width: 200px; height: 200px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    background: rgba(var(--accent-rgb), 0.15);
+    border: 6px solid rgba(var(--accent-rgb), 0.2);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    box-shadow: 0 0 0 3px var(--bg-dark), 0 0 0 5px rgba(var(--accent-rgb), 0.4), inset 0 0 20px rgba(0,0,0,0.5);
+    overflow: hidden;
+    transition: all 0.7s ease;
+  }
+  .sw-card-link:hover .sw-emblem {
+    background: rgba(var(--accent-rgb), 0.3);
+    border-color: rgb(var(--accent-rgb));
+    box-shadow: 0 0 0 3px var(--bg-dark), 0 0 0 5px rgba(var(--accent-rgb), 0.8),
+                0 0 35px rgba(var(--accent-rgb), 1), 0 0 80px rgba(var(--accent-rgb), 0.6);
+  }
+  .sw-emblem img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; transition: filter 0.7s ease; }
+  .sw-card-link:hover .sw-emblem img { filter: brightness(1.2) contrast(1.1) saturate(1.2); }
+  .sw-company-name {
+    color: var(--accent-light);
+    font-size: 1.2em; font-weight: bold;
+    margin-bottom: 20px;
+    letter-spacing: 0.03em;
+    transition: all 0.6s ease;
+  }
+  .sw-card-link:hover .sw-company-name { color: var(--accent-bright); text-shadow: 0 0 15px rgba(var(--accent-rgb), 1); }
+  .sw-desc { color: #b0b0b0; font-size: 0.95em; line-height: 1.7; text-align: left; padding: 0 5px; }
+
+  /* Ссылки в блоке "Полезные ссылки" */
+  .sw-links-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; max-width: 1600px; margin: 0 auto; }
+  .sw-link-cell { display: flex; align-items: center; justify-content: center; padding: 35px 20px; border-bottom: 1px solid rgba(var(--accent-rgb), 0.2); }
+  .sw-link-cell:nth-child(n+7) { border-bottom: none; }
+  .sw-link-cell:not(:nth-child(3n))::after { content: ''; position: absolute; right: 0; top: 25%; height: 50%; width: 1px; background: rgba(var(--accent-rgb), 0.2); }
+  .sw-link-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: rgba(var(--accent-rgb), 0.15);
+    color: var(--accent-bright);
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: 600;
+    border-radius: 4px;
+    border: 2px solid rgba(var(--accent-rgb), 0.5);
+    transition: all 0.5s ease;
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.2);
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.6);
+    white-space: nowrap;
+  }
+  .sw-link-btn:hover {
+    background: rgba(var(--accent-rgb), 0.9);
+    color: #020a12;
+    border-color: rgb(var(--accent-rgb));
+    box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.9), 0 0 55px rgba(var(--accent-rgb), 0.6);
     transform: translateY(-2px);
   }
-  .sw5-btn:hover::before { left: 100%; }
-  .sw5-btn .arrow { font-size: 1.3em; font-weight: bold; }
 
-  .sw5-dots {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 9px;
-    margin-top: 28px;
-  }
-  .sw5-dot {
-    width: 11px; height: 11px;
+  /* Командование */
+  .sw-command-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 60px; max-width: 1400px; margin: 0 auto; }
+  .sw-command-card { text-align: center; }
+  .sw-command-photo {
+    width: 320px; height: 320px;
+    margin: 0 auto 35px;
     border-radius: 50%;
-    background: rgba(120, 150, 190, 0.5);
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.4s ease;
+    background: rgba(var(--accent-rgb), 0.15);
+    border: 8px solid rgba(var(--accent-rgb), 0.2);
+    overflow: hidden;
+    box-shadow: 0 0 0 3px var(--bg-dark), 0 0 0 6px rgba(var(--accent-rgb), 0.4),
+                0 8px 30px rgba(0,0,0,0.7), inset 0 0 40px rgba(var(--accent-rgb), 0.2);
+    transition: all 0.7s ease;
   }
-  .sw5-dot:hover { background: rgba(160, 200, 240, 0.8); transform: scale(1.2); }
-  .sw5-dot.active {
-    background: #a8d0ff;
-    box-shadow: 0 0 12px rgba(160, 210, 255, 0.9);
-    transform: scale(1.3);
+  .sw-command-card:hover .sw-command-photo {
+    border-color: rgb(var(--accent-rgb));
+    box-shadow: 0 0 0 3px var(--bg-dark), 0 0 0 6px rgba(var(--accent-rgb), 0.8),
+                0 0 40px rgba(var(--accent-rgb), 1), 0 8px 30px rgba(0,0,0,0.7);
   }
-  .sw5-counter {
-    text-align: center;
-    color: #7a90b0;
-    font-size: 0.9em;
-    letter-spacing: 0.15em;
-    margin-top: 15px;
+  .sw-command-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; transition: filter 0.7s ease, transform 0.7s ease; }
+  .sw-command-card:hover .sw-command-photo img { filter: brightness(1.15); transform: scale(1.05); }
+  .sw-command-name {
+    color: var(--accent-bright);
+    font-size: 1.6em; font-weight: 600;
+    margin-bottom: 25px;
+    font-family: 'Georgia', serif;
+    transition: all 0.6s ease;
   }
+  .sw-command-card:hover .sw-command-name { text-shadow: 0 0 20px rgba(var(--accent-rgb), 1); }
+  .sw-command-bio { color: #c0c0c0; font-size: 0.98em; line-height: 1.75; text-align: left; padding: 0 20px; }
 
-  /* ═══════════════════════════════════════════════════════════
-     АДАПТИВ
-     ═══════════════════════════════════════════════════════════ */
+  /* Галерея */
+  .sw-gallery-wrap { background: var(--bg-dark); padding: 60px 40px 80px; }
+  .sw-gallery { max-width: 1000px; margin: 0 auto; }
+  .sw-gallery-stage {
+    position: relative; width: 100%; aspect-ratio: 16 / 10;
+    border-radius: 20px; overflow: hidden;
+    background: var(--bg-darker);
+    border: 3px solid rgba(var(--accent-rgb), 0.6);
+    box-shadow: 0 0 0 3px var(--bg-dark), 0 0 0 6px rgba(var(--accent-rgb), 0.4),
+                0 10px 40px rgba(0,0,0,0.8), 0 0 35px rgba(var(--accent-rgb), 0.4);
+  }
+  .sw-gallery-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.8s ease; border-radius: 17px; }
+  .sw-gallery-stage img.active { opacity: 1; }
+  .sw-gallery-controls { display: flex; justify-content: center; gap: 30px; margin-top: 35px; }
+  .sw-gallery-btn {
+    padding: 14px 36px;
+    background: rgba(var(--accent-rgb), 0.15);
+    color: var(--accent-bright);
+    font-size: 1em; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    border: 2px solid rgba(var(--accent-rgb), 0.5);
+    border-radius: 6px; cursor: pointer;
+    transition: all 0.4s ease;
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.6);
+  }
+  .sw-gallery-btn:hover {
+    background: rgba(var(--accent-rgb), 0.9);
+    color: #020a12;
+    border-color: rgb(var(--accent-rgb));
+    box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.9);
+    transform: translateY(-2px);
+  }
+  .sw-gallery-dots { display: flex; justify-content: center; flex-wrap: wrap; gap: 9px; margin-top: 28px; }
+  .sw-gallery-dot { width: 11px; height: 11px; border-radius: 50%; background: rgba(var(--accent-rgb), 0.4); border: none; cursor: pointer; padding: 0; transition: all 0.4s ease; }
+  .sw-gallery-dot.active { background: rgb(var(--accent-rgb)); box-shadow: 0 0 15px rgba(var(--accent-rgb), 1); transform: scale(1.3); }
+  .sw-gallery-counter { text-align: center; color: rgba(var(--accent-rgb), 0.7); font-size: 0.9em; letter-spacing: 0.15em; margin-top: 15px; }
+
+  /* ═══ АДАПТИВ ═══ */
   @media (max-width: 1000px) {
-    .holo-nav { flex-wrap: wrap; gap: 12px; padding: 14px 20px; }
-    .holo-btn { padding: 10px 20px; font-size: 0.85em; }
-    .sw-header h1 { font-size: 2.2em; }
-    .sw-header { height: 140px; }
-    .sw1-header h1 { font-size: 2.3em; }
-    .sw1-header { height: 170px; }
-    .sw1-info { padding: 50px 30px 30px; }
-    .sw1-info p { font-size: 1.05em; }
-    .sw1-crawl { margin: 0 20px 30px; }
-    .sw1-crawl-icon { width: 34px; height: 34px; }
-    .sw1-bottom-img { padding: 0 20px 40px; }
-    .sw1-bottom-img img { max-height: 320px; }
-    .sw2-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
-    .sw3-links-grid { grid-template-columns: repeat(2, 1fr); }
-    .sw3-link-cell { border-bottom: 1px solid #45454a; }
-    .sw3-link-cell::after { display: none; }
-    .sw3-link-cell:nth-child(2n)::after {
-      content: '';
-      display: block;
-      position: absolute;
-      right: 0; top: 25%;
-      height: 50%; width: 1px;
-      background: #45454a;
-    }
-    .sw3-link-cell:nth-last-child(-n+1) { border-bottom: none; }
-    .sw3-link-btn { font-size: 0.9em; padding: 10px 22px; }
-    .sw4-photo { width: 260px; height: 260px; }
-    .sw4-name { font-size: 1.3em; }
-    .sw5-carousel-wrap { padding: 40px 20px 60px; }
-    .sw5-stage { aspect-ratio: 4 / 3; border-radius: 16px; }
-    .sw5-btn { font-size: 0.9em; padding: 12px 28px; }
+    .sw0-welcome { padding: 45px 25px; margin: 20px auto 30px; }
+    .sw0-title { font-size: 2em; }
+    .sw-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    .sw-links-grid { grid-template-columns: repeat(2, 1fr); }
+    .sw-command-photo { width: 260px; height: 260px; }
+    .sw-gallery-wrap { padding: 40px 20px 60px; }
   }
   @media (max-width: 700px) {
-    .sw-header h1 { font-size: 1.6em; }
-    .sw-header { height: 120px; }
-    .sw1-header h1 { font-size: 1.6em; letter-spacing: 0.08em; }
-    .sw1-header { height: 130px; }
-    .sw1-info { padding: 35px 20px 20px; }
-    .sw1-info p { font-size: 1em; line-height: 1.7; }
-    .sw1-crawl { margin: 0 15px 25px; padding: 20px 12px; border-radius: 10px; }
-    .sw1-crawl-text { font-size: 0.8em; letter-spacing: 0.2em; }
-    .sw1-bottom-img { padding: 0 15px 30px; }
-    .sw1-bottom-img img { max-height: 220px; }
-    .sw2-grid { grid-template-columns: 1fr; }
-    .sw2-emblem { width: 160px; height: 160px; }
-    .sw2-note p { font-size: 0.95em; padding: 15px 20px; letter-spacing: 0.04em; }
-    .sw3-links { padding: 30px 15px 50px; }
-    .sw3-links-grid { grid-template-columns: 1fr; }
-    .sw3-link-cell { border-bottom: 1px solid #45454a; padding: 25px 15px; }
-    .sw3-link-cell::after { display: none !important; }
-    .sw3-link-cell:last-child { border-bottom: none; }
-    .sw4-content { padding: 40px 20px 60px; }
-    .sw4-grid { grid-template-columns: 1fr; gap: 50px; }
-    .sw4-photo { width: 220px; height: 220px; }
-    .sw4-name { font-size: 1.2em; }
-    .sw5-carousel-wrap { padding: 30px 15px 50px; }
-    .sw5-stage { border-radius: 12px; }
-    .sw5-controls { gap: 12px; margin-top: 25px; }
-    .sw5-btn { font-size: 0.8em; padding: 10px 20px; letter-spacing: 0.05em; }
-    .sw5-dot { width: 8px; height: 8px; }
+    .sw0-welcome { padding: 35px 18px; }
+    .sw0-title { font-size: 1.5em; }
+    .sw0-btn { width: 100%; justify-content: center; }
+    .sw-grid-4 { grid-template-columns: 1fr; }
+    .sw-emblem { width: 160px; height: 160px; }
+    .sw-links-grid { grid-template-columns: 1fr; }
+    .sw-command-grid { grid-template-columns: 1fr; gap: 50px; }
+    .sw-command-photo { width: 220px; height: 220px; }
+    .sw-gallery-wrap { padding: 30px 15px 50px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ НАВИГАЦИЯ ═══════════════ -->
+<!-- ═══════ НАВИГАЦИЯ — ЛОКАЛЬНЫЕ ССЫЛКИ ═══════ -->
 <nav class="holo-nav">
-
-  <a href="#" class="holo-btn active">
+  <a href="index.html" class="holo-btn active">
     <span class="shine"></span>
     Главная
   </a>
-
   <div class="holo-drop">
     <a href="#" class="holo-btn">
       <span class="shine"></span>
@@ -1030,13 +373,12 @@
       <span class="arrow">▼</span>
     </a>
     <div class="holo-menu">
-      <a href="https://sites.google.com/view/dsddddwww/%D0%BF%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-104-%D0%B3%D0%BE/%D1%80%D0%BE%D1%82%D0%B0-cerberus" target="_top">Рота "Cerberus"</a>
-      <a href="https://sites.google.com/view/dsddddwww/%D0%BF%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-104-%D0%B3%D0%BE/%D1%80%D0%BE%D1%82%D0%B0-fenrir" target="_top">Рота "Fenrir"</a>
-      <a href="https://sites.google.com/view/dsddddwww/%D0%BF%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-104-%D0%B3%D0%BE/%D0%BE%D1%82%D1%80%D1%8F%D0%B4-moon-special-company" target="_top">Отряд "Moon Special Company"</a>
-      <a href="https://sites.google.com/view/dsddddwww/%D0%BF%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-104-%D0%B3%D0%BE/%D1%8D%D1%81%D0%BA%D0%B0%D0%B4%D1%80%D0%B8%D0%BB%D1%8C%D1%8F-hunter" target="_top">Эскадрилья "Hunter"</a>
+      <a href="cerberus.html">Рота "Cerberus"</a>
+      <a href="fenrir.html">Рота "Fenrir"</a>
+      <a href="msc.html">Отряд "Moon Special Company"</a>
+      <a href="hunter.html">Эскадрилья "Hunter"</a>
     </div>
   </div>
-
   <div class="holo-drop">
     <a href="#" class="holo-btn">
       <span class="shine"></span>
@@ -1044,153 +386,156 @@
       <span class="arrow">▼</span>
     </a>
     <div class="holo-menu">
-      <a href="https://sites.google.com/view/dsddddwww/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/%D0%BF%D0%BE%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F" target="_top">Постановления</a>
-      <a href="https://sites.google.com/view/dsddddwww/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/%D0%BC%D0%B5%D0%B4%D0%B0%D0%BB%D0%B8" target="_top">Медали</a>
-      <a href="https://sites.google.com/view/dsddddwww/%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F/%D0%BA%D0%B0%D1%80%D1%82%D1%8B" target="_top">Карты</a>
+      <a href="postanovleniya.html">Постановления</a>
+      <a href="medali.html">Медали</a>
+      <a href="karty.html">Карты</a>
     </div>
   </div>
-
 </nav>
 
-<!-- ═══════════════ КОНТЕНТ ═══════════════ -->
+<!-- ═══════ ПРИВЕТСТВЕННОЕ ОКНО ═══════ -->
+<div class="sw0-welcome">
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+  <div class="sw0-content">
+    <div class="sw0-badge">★ 104-й Батальон ★</div>
+    <h1 class="sw0-title">Добро пожаловать</h1>
+    <div class="sw0-subtitle">Волчья Стая · Великая Армия Республики</div>
+    <p class="sw0-text">
+      Ты попал на официальный портал <span class="accent">104-го батальона "Волчья Стая"</span> —
+      подразделения поддержки и спасения. Здесь ты найдёшь информацию о структуре батальона,
+      его командовании, полезные ссылки и галерею.
+    </p>
+    <div class="sw0-actions">
+      <a href="https://discord.gg/M8aXREVvxD" target="_blank" class="sw0-btn">⚔ Присоединиться</a>
+    </div>
+  </div>
+</div>
+
 <div class="sw-page">
 
-  <!-- ▓▓▓ БЛОК 1 — ИНФОРМАЦИЯ ▓▓▓ -->
+  <!-- БЛОК 1 — ИНФОРМАЦИЯ -->
   <div class="sw-block">
     <div class="sw-inner">
-      <div class="sw1-ash">
-        <div class="sw1-ash-particle"></div><div class="sw1-ash-particle"></div>
-        <div class="sw1-ash-particle"></div><div class="sw1-ash-particle"></div>
-        <div class="sw1-ash-particle"></div><div class="sw1-ash-particle"></div>
-        <div class="sw1-ash-particle"></div><div class="sw1-ash-particle"></div>
-        <div class="sw1-ash-particle"></div><div class="sw1-ash-particle"></div>
-        <div class="sw1-ash-particle"></div><div class="sw1-ash-particle"></div>
-        <div class="sw1-ash-particle"></div><div class="sw1-ash-particle"></div>
-        <div class="sw1-ash-particle"></div>
+      <div class="sw-ash">
+        <div class="sw-ash-particle"></div><div class="sw-ash-particle"></div>
+        <div class="sw-ash-particle"></div><div class="sw-ash-particle"></div>
+        <div class="sw-ash-particle"></div><div class="sw-ash-particle"></div>
+        <div class="sw-ash-particle"></div><div class="sw-ash-particle"></div>
+        <div class="sw-ash-particle"></div><div class="sw-ash-particle"></div>
+        <div class="sw-ash-particle"></div><div class="sw-ash-particle"></div>
+        <div class="sw-ash-particle"></div><div class="sw-ash-particle"></div>
+        <div class="sw-ash-particle"></div>
       </div>
-      <div class="sw1-header">
-        <div class="sw1-stars"></div>
+      <div class="sw-banner">
+        <div class="sw-stars"></div>
         <h1>Информация</h1>
       </div>
-      <div class="sw1-info">
+      <div class="sw-info">
         <p><span class="accent">104 батальон "Волчья Стая"</span> — батальон поддержки и спасения Великой армии Республики. Он находился под командованием клона-коммандера Вольфа и генерала Пло Куна.</p>
         <p>В этот батальон входил отряд <span class="accent">«Волчья стая»</span>, названный в честь Вольфа.</p>
       </div>
-      <div class="sw1-crawl">
-        <div class="sw1-crawl-content">
-          <img class="sw1-crawl-icon" src="https://i.imgur.com/1f9QrPr.png" alt="★">
-          <div class="sw1-crawl-text">Да пребудет с тобой Сила</div>
-          <img class="sw1-crawl-icon" src="https://i.imgur.com/1f9QrPr.png" alt="★">
-        </div>
-      </div>
-      <div class="sw1-bottom-img">
-        <img src="https://i.imgur.com/5tjyE5k.png" alt="Bottom image">
-      </div>
     </div>
   </div>
 
-  <!-- ▓▓▓ БЛОК 2 — СТРУКТУРА БАТАЛЬОНА ▓▓▓ -->
+  <!-- БЛОК 2 — СТРУКТУРА БАТАЛЬОНА -->
   <div class="sw-block">
     <div class="sw-inner">
-      <div class="sw-header">
+      <div class="sw-banner">
         <div class="sw-stars"></div>
         <h1>Структура Батальона</h1>
       </div>
-      <div class="sw2-content">
-        <div class="sw2-grid">
+      <div class="sw-content-block">
+        <div class="sw-grid-4">
 
-          <a class="sw2-card cerberus" href="https://sites.google.com/view/dsddddwww/%D0%BF%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-104-%D0%B3%D0%BE/%D1%80%D0%BE%D1%82%D0%B0-cerberus" target="_top">
-            <div class="sw2-emblem"><img src="https://i.imgur.com/d1dhDp7.png" alt="Cerberus"></div>
-            <div class="sw2-company-name">Рота "Cerberus"</div>
-            <div class="sw2-desc">Хочешь биться в авангарде и первым встречать противника? Жечь всё и вся? Стать первоклассным медиком, что спасает жизни на передовой? Или совершать внезапные налёты на головы растерянных противников? Рота Cerberus готова принять тебя в свои ряды!</div>
+          <a class="sw-card-link" href="cerberus.html">
+            <div class="sw-emblem"><img src="https://i.imgur.com/d1dhDp7.png" alt="Cerberus"></div>
+            <div class="sw-company-name">Рота "Cerberus"</div>
+            <div class="sw-desc">Штурмовая рота. Авангард, медики, внезапные налёты. Первые встречают противника.</div>
           </a>
 
-          <a class="sw2-card fenrir" href="https://sites.google.com/view/dsddddwww/%D0%BF%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-104-%D0%B3%D0%BE/%D1%80%D0%BE%D1%82%D0%B0-fenrir" target="_top">
-            <div class="sw2-emblem"><img src="https://i.imgur.com/KDS4bpF.png" alt="Fenrir"></div>
-            <div class="sw2-company-name">Рота "Fenrir"</div>
-            <div class="sw2-desc">Рота Fenrir подойдёт любителям «поострее». Наши разведчики начинают работу задолго до основных сил, всегда будучи на шаг впереди неприятеля. А если изголодались по адреналину — ассасины к вашим услугам! Эта диверсионная группа обезвредит ключевые цели и создаст неразбериху в кратчайшие сроки.</div>
+          <a class="sw-card-link" href="fenrir.html">
+            <div class="sw-emblem"><img src="https://i.imgur.com/KDS4bpF.png" alt="Fenrir"></div>
+            <div class="sw-company-name">Рота "Fenrir"</div>
+            <div class="sw-desc">Разведка, диверсии, ассасины. Работают в тылу врага.</div>
           </a>
 
-          <a class="sw2-card moon" href="https://sites.google.com/view/dsddddwww/%D0%BF%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-104-%D0%B3%D0%BE/%D0%BE%D1%82%D1%80%D1%8F%D0%B4-moon-special-company" target="_top">
-            <div class="sw2-emblem"><img src="https://i.imgur.com/XhOdc65.png" alt="Moon Special Company"></div>
-            <div class="sw2-company-name">Отряд "Moon Special Company"</div>
-            <div class="sw2-desc">Отряд спецназначения Moon Special Company — настоящий «гуманитарный» спецназ. Ударные клоны, как обоюдно острый клинок, поддерживают дисциплину и дух бойцов на должном уровне, а на спасательных операциях напрямую работают с террористами и проводят освобождение заложников.</div>
+          <a class="sw-card-link" href="msc.html">
+            <div class="sw-emblem"><img src="https://i.imgur.com/XhOdc65.png" alt="Moon Special Company"></div>
+            <div class="sw-company-name">Отряд "Moon Special Company"</div>
+            <div class="sw-desc">Спецназ. Освобождение заложников, работа с террористами.</div>
           </a>
 
-          <a class="sw2-card hunter" href="https://sites.google.com/view/dsddddwww/%D0%BF%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-104-%D0%B3%D0%BE/%D1%8D%D1%81%D0%BA%D0%B0%D0%B4%D1%80%D0%B8%D0%BB%D1%8C%D1%8F-hunter" target="_top">
-            <div class="sw2-emblem"><img src="https://i.imgur.com/qpdeVxS.png" alt="Hunter"></div>
-            <div class="sw2-company-name">Эскадрилья "Hunter"</div>
-            <div class="sw2-desc">Небу тоже нужны свои покровители, а потому асы эскадрильи Hunter без устали оттачивают навыки владения воздушной техникой. Словно гром среди ясного неба, наши пилоты разят противника как в воздухе, так и на земле.</div>
+          <a class="sw-card-link" href="hunter.html">
+            <div class="sw-emblem"><img src="https://i.imgur.com/qpdeVxS.png" alt="Hunter"></div>
+            <div class="sw-company-name">Эскадрилья "Hunter"</div>
+            <div class="sw-desc">Асы воздуха. Господство в небе, огневая поддержка с воздуха.</div>
           </a>
 
         </div>
       </div>
-      <div class="sw2-note">
-        <p>Вступление в роты осуществляется через подачу анкет на форуме в дискорде</p>
-      </div>
     </div>
   </div>
 
-  <!-- ▓▓▓ БЛОК 3 — ПОЛЕЗНЫЕ ССЫЛКИ ▓▓▓ -->
+  <!-- БЛОК 3 — ПОЛЕЗНЫЕ ССЫЛКИ -->
   <div class="sw-block">
     <div class="sw-inner">
-      <div class="sw-header">
+      <div class="sw-banner">
         <div class="sw-stars"></div>
         <h1>Полезные ссылки</h1>
       </div>
-      <div class="sw3-links">
-        <div class="sw3-links-grid">
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://docs.google.com/spreadsheets/d/1amI-Kgw4zPWOQ4dP5D-4AOqq4LxizoRDKbe9bFoQniU/edit?gid=0#gid=0" target="_blank">Таблица 104-го</a></div>
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://sites.google.com/view/riseoftherepublicdiscovery" target="_blank">Устав ВАР</a></div>
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://docs.google.com/document/d/1Z60sqxqI16XXL_5449UiUrpK_2SsXdla0T2UfIUfDuY/edit?tab=t.0#heading=h.rcjzgbpdkgoj" target="_blank">Строевая подготовка</a></div>
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://www.youtube.com/channel/UCh6g1xpRQQ5sz4-1cXx9zDw" target="_blank">YouTube канал 104-го</a></div>
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://discord.com/invite/M8aXREVvxD" target="_blank">Дискорд 104-го батальона</a></div>
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://www.tiktok.com/@104th.rotr?_r=1&_t=ZS-94BSU6iYH5T" target="_blank">Тик-ток канал 104-го</a></div>
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://docs.google.com/document/d/1G1KUBi0ssVykhDCRA9dyg7nhg78C1dFol7yTRi0lOHU/edit?tab=t.0#heading=h.6xwms6ab4rry" target="_blank">Оборона базы (Тинель)</a></div>
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://docs.google.com/document/d/1dQhuq2R7TULbZREyEdJs3E_tQPcd07Vrm_rUgWFrIz8/edit?tab=t.0#heading=h.6xwms6ab4rry" target="_blank">Оборона базы (Анаксис)</a></div>
-          <div class="sw3-link-cell"><a class="sw3-link-btn" href="https://docs.google.com/document/d/1ldOcOWJeDJqrMgm5-sJijzcESy8D8S5lnV5Z7S5e8Os/edit?tab=t.0#heading=h.oh3d8cw2obah" target="_blank">Оборона базы (Риши)</a></div>
+      <div class="sw-content-block">
+        <div class="sw-links-grid">
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/spreadsheets/d/1amI-Kgw4zPWOQ4dP5D-4AOqq4LxizoRDKbe9bFoQniU/edit?gid=0#gid=0" target="_blank">Таблица 104-го</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://sites.google.com/view/riseoftherepublicdiscovery" target="_blank">Устав ВАР</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/document/d/1Z60sqxqI16XXL_5449UiUrpK_2SsXdla0T2UfIUfDuY/edit" target="_blank">Строевая подготовка</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://www.youtube.com/channel/UCh6g1xpRQQ5sz4-1cXx9zDw" target="_blank">YouTube канал</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://discord.com/invite/M8aXREVvxD" target="_blank">Дискорд батальона</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://www.tiktok.com/@104th.rotr" target="_blank">Тик-ток канал</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/document/d/1G1KUBi0ssVykhDCRA9dyg7nhg78C1dFol7yTRi0lOHU/edit" target="_blank">Оборона (Тинель)</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/document/d/1dQhuq2R7TULbZREyEdJs3E_tQPcd07Vrm_rUgWFrIz8/edit" target="_blank">Оборона (Анаксис)</a></div>
+          <div class="sw-link-cell"><a class="sw-link-btn" href="https://docs.google.com/document/d/1ldOcOWJeDJqrMgm5-sJijzcESy8D8S5lnV5Z7S5e8Os/edit" target="_blank">Оборона (Риши)</a></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ▓▓▓ БЛОК 4 — КОМАНДОВАНИЕ ▓▓▓ -->
+  <!-- БЛОК 4 — КОМАНДОВАНИЕ -->
   <div class="sw-block">
     <div class="sw-inner">
-      <div class="sw-header">
+      <div class="sw-banner">
         <div class="sw-stars"></div>
         <h1>Командование батальона</h1>
       </div>
-      <div class="sw4-content">
-        <div class="sw4-grid">
-
-          <div class="sw4-card">
-            <div class="sw4-photo"><img src="https://i.imgur.com/ArZbkTj.png" alt="Генерал-Джедай Пло-Кун"></div>
-            <div class="sw4-name">Генерал-Джедай Пло-Кун</div>
-            <div class="sw4-bio">Мужчина-кел-дор, мастер-джедай. В годы заката Галактической Республики он входил в состав Совета джедаев вплоть до его развала в 19 ДБЯ. Во время Войн клонов Кун был назначен высшим генералом-джедаем Республиканской армии. Помимо этого, Пло Кун был превосходным пилотом.</div>
+      <div class="sw-content-block">
+        <div class="sw-command-grid">
+          <div class="sw-command-card">
+            <div class="sw-command-photo"><img src="https://i.imgur.com/ArZbkTj.png" alt="Пло-Кун"></div>
+            <div class="sw-command-name">Генерал-Джедай Пло-Кун</div>
+            <div class="sw-command-bio">Мужчина-кел-дор, мастер-джедай. В годы заката Галактической Республики он входил в состав Совета джедаев вплоть до его развала в 19 ДБЯ. Во время Войн клонов Кун был назначен высшим генералом-джедаем Республиканской армии.</div>
           </div>
-
-          <div class="sw4-card">
-            <div class="sw4-photo"><img src="https://i.imgur.com/MNfynn6.png" alt="Командер Вольф"></div>
-            <div class="sw4-name">Командер Вольф</div>
-            <div class="sw4-bio">Клон-коммандер Великой армии Республики, служивший под командованием генерала-джедая Пло Куна во время Войн клонов. Он командовал отрядом «Волчья стая» 104-го батальона и проявил себя как хороший стратег.</div>
+          <div class="sw-command-card">
+            <div class="sw-command-photo"><img src="https://i.imgur.com/MNfynn6.png" alt="Вольф"></div>
+            <div class="sw-command-name">Командер Вольф</div>
+            <div class="sw-command-bio">Клон-коммандер Великой армии Республики, служивший под командованием генерала-джедая Пло Куна. Он командовал отрядом «Волчья стая» 104-го батальона и проявил себя как хороший стратег.</div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ▓▓▓ БЛОК 5 — ГАЛЕРЕЯ ▓▓▓ -->
+  <!-- БЛОК 5 — ГАЛЕРЕЯ -->
   <div class="sw-block">
     <div class="sw-inner">
-      <div class="sw-header">
+      <div class="sw-banner">
         <div class="sw-stars"></div>
         <h1>Галерея батальона</h1>
       </div>
-      <div class="sw5-carousel-wrap">
-        <div class="sw5-carousel">
-          <div class="sw5-stage">
+      <div class="sw-gallery-wrap">
+        <div class="sw-gallery">
+          <div class="sw-gallery-stage" id="galleryStage">
             <img src="https://i.imgur.com/YcbZFxb.jpeg" class="active" alt="Фото 1">
             <img src="https://i.imgur.com/zxYSwsn.jpeg" alt="Фото 2">
             <img src="https://i.imgur.com/RzkDHRF.jpeg" alt="Фото 3">
@@ -1199,21 +544,13 @@
             <img src="https://i.imgur.com/5nND6zC.png" alt="Фото 6">
             <img src="https://i.imgur.com/xExvVWf.png" alt="Фото 7">
             <img src="https://i.imgur.com/BKMNM9d.png" alt="Фото 8">
-            <img src="https://i.imgur.com/NAQl7yI.jpeg" alt="Фото 9">
-            <img src="https://i.imgur.com/WdjoWKP.jpeg" alt="Фото 10">
-            <img src="https://i.imgur.com/j5O94Gy.jpeg" alt="Фото 11">
-            <img src="https://i.imgur.com/1V1DzRK.jpeg" alt="Фото 12">
-            <img src="https://i.imgur.com/Br3qCJI.png" alt="Фото 13">
-            <img src="https://i.imgur.com/6QIAcpp.jpeg" alt="Фото 14">
-            <img src="https://i.imgur.com/wByAZPu.jpeg" alt="Фото 15">
-            <img src="https://i.imgur.com/1PLJC26.jpeg" alt="Фото 16">
           </div>
-          <div class="sw5-controls">
-            <button class="sw5-btn" onclick="sw5Prev()"><span class="arrow">‹</span> Назад</button>
-            <button class="sw5-btn" onclick="sw5Next()">Вперёд <span class="arrow">›</span></button>
+          <div class="sw-gallery-controls">
+            <button class="sw-gallery-btn" onclick="galleryPrev()">‹ Назад</button>
+            <button class="sw-gallery-btn" onclick="galleryNext()">Вперёд ›</button>
           </div>
-          <div class="sw5-dots" id="sw5Dots"></div>
-          <div class="sw5-counter" id="sw5Counter">1 / 16</div>
+          <div class="sw-gallery-dots" id="galleryDots"></div>
+          <div class="sw-gallery-counter" id="galleryCounter">1 / 8</div>
         </div>
       </div>
     </div>
@@ -1223,19 +560,19 @@
 
 <script>
   (function() {
-    const slides = document.querySelectorAll('.sw5-stage img');
-    const dotsContainer = document.getElementById('sw5Dots');
-    const counter = document.getElementById('sw5Counter');
+    const slides = document.querySelectorAll('#galleryStage img');
+    const dotsContainer = document.getElementById('galleryDots');
+    const counter = document.getElementById('galleryCounter');
     let current = 0;
 
     slides.forEach((_, i) => {
       const dot = document.createElement('button');
-      dot.className = 'sw5-dot' + (i === 0 ? ' active' : '');
+      dot.className = 'sw-gallery-dot' + (i === 0 ? ' active' : '');
       dot.addEventListener('click', () => goTo(i));
       dotsContainer.appendChild(dot);
     });
 
-    const dots = document.querySelectorAll('.sw5-dot');
+    const dots = document.querySelectorAll('.sw-gallery-dot');
 
     function goTo(index) {
       slides[current].classList.remove('active');
@@ -1246,8 +583,8 @@
       counter.textContent = (current + 1) + ' / ' + slides.length;
     }
 
-    window.sw5Next = function() { goTo(current + 1); };
-    window.sw5Prev = function() { goTo(current - 1); };
+    window.galleryNext = function() { goTo(current + 1); };
+    window.galleryPrev = function() { goTo(current - 1); };
   })();
 </script>
 
