@@ -206,44 +206,142 @@
     transform: translateY(-3px);
   }
 
-  /* ═══ БЛОКИ (информация, структура, ссылки, командование, галерея) ═══ */
+  /* ═══ СТРУКТУРА БАТАЛЬОНА — 4 карточки со своими цветами ═══ */
   .sw-content-block { background: var(--bg-dark); padding: 50px 30px 30px; }
   .sw-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 35px; max-width: 1400px; margin: 0 auto; }
-  .sw-card-link { display: block; text-align: center; text-decoration: none; color: inherit; border-radius: 8px; padding: 10px; transition: transform 0.5s ease; }
-  .sw-card-link:hover { transform: translateY(-5px); }
+
+  .sw-card {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 8px;
+    padding: 10px;
+    transition: transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: cardAppear 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  .sw-card:nth-child(1) { animation-delay: 1.0s; }
+  .sw-card:nth-child(2) { animation-delay: 1.25s; }
+  .sw-card:nth-child(3) { animation-delay: 1.5s; }
+  .sw-card:nth-child(4) { animation-delay: 1.75s; }
+  @keyframes cardAppear {
+    0%   { opacity: 0; transform: translateY(40px) scale(0.95); }
+    60%  { opacity: 1; transform: translateY(-5px) scale(1.02); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .sw-card:hover { transform: translateY(-5px); }
+
   .sw-emblem {
-    width: 200px; height: 200px;
+    width: 200px;
+    height: 200px;
     margin: 0 auto 30px;
     border-radius: 50%;
-    background: rgba(var(--accent-rgb), 0.15);
-    border: 6px solid rgba(var(--accent-rgb), 0.2);
-    display: flex; align-items: center; justify-content: center;
+    background: #454549;
+    border: 6px solid #2a2a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    box-shadow: 0 0 0 3px var(--bg-dark), 0 0 0 5px rgba(var(--accent-rgb), 0.4), inset 0 0 20px rgba(0,0,0,0.5);
+    box-shadow:
+      0 0 0 3px var(--bg-dark),
+      0 0 0 5px #55555a,
+      inset 0 0 20px rgba(0,0,0,0.5);
     overflow: hidden;
-    transition: all 0.7s ease;
-  }
-  .sw-card-link:hover .sw-emblem {
-    background: rgba(var(--accent-rgb), 0.3);
-    border-color: rgb(var(--accent-rgb));
-    box-shadow: 0 0 0 3px var(--bg-dark), 0 0 0 5px rgba(var(--accent-rgb), 0.8),
-                0 0 35px rgba(var(--accent-rgb), 1), 0 0 80px rgba(var(--accent-rgb), 0.6);
+    transition: box-shadow 0.7s ease, border-color 0.7s ease, background 0.7s ease;
   }
   .sw-emblem img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; transition: filter 0.7s ease; }
-  .sw-card-link:hover .sw-emblem img { filter: brightness(1.2) contrast(1.1) saturate(1.2); }
+  .sw-card:hover .sw-emblem img { filter: brightness(1.15) contrast(1.05) saturate(1.1); }
+
+  /* 🔵 CERBERUS — синий */
+  .sw-card.cerberus:hover .sw-emblem {
+    background: #3d4a5e;
+    border-color: #88b8f0;
+    box-shadow:
+      0 0 0 3px var(--bg-dark), 0 0 0 5px #6aa8e8,
+      0 0 25px rgba(120, 190, 255, 0.9),
+      0 0 60px rgba(80, 150, 230, 0.65),
+      0 0 100px rgba(60, 120, 200, 0.45),
+      inset 0 0 20px rgba(140, 200, 255, 0.2);
+  }
+  .sw-card.cerberus:hover .sw-company-name {
+    color: #cce4ff;
+    text-shadow: 0 0 10px rgba(160, 210, 255, 1), 0 0 25px rgba(120, 180, 240, 0.85), 0 0 45px rgba(80, 140, 220, 0.6);
+  }
+  .sw-card.cerberus:hover .sw-desc { color: #d5e3f0; }
+
+  /* 🟢 FENRIR — зелёный */
+  .sw-card.fenrir:hover .sw-emblem {
+    background: #3a5040;
+    border-color: #88e8a8;
+    box-shadow:
+      0 0 0 3px var(--bg-dark), 0 0 0 5px #6ae890,
+      0 0 25px rgba(120, 255, 170, 0.9),
+      0 0 60px rgba(80, 230, 140, 0.65),
+      0 0 100px rgba(60, 200, 110, 0.45),
+      inset 0 0 20px rgba(140, 255, 180, 0.2);
+  }
+  .sw-card.fenrir:hover .sw-company-name {
+    color: #ccffdc;
+    text-shadow: 0 0 10px rgba(160, 255, 200, 1), 0 0 25px rgba(120, 240, 170, 0.85), 0 0 45px rgba(80, 220, 140, 0.6);
+  }
+  .sw-card.fenrir:hover .sw-desc { color: #d5f0de; }
+
+  /* 🟣 MOON — фиолетовый */
+  .sw-card.moon:hover .sw-emblem {
+    background: #4a3d5e;
+    border-color: #b888f0;
+    box-shadow:
+      0 0 0 3px var(--bg-dark), 0 0 0 5px #a86ae8,
+      0 0 25px rgba(190, 120, 255, 0.9),
+      0 0 60px rgba(150, 80, 230, 0.65),
+      0 0 100px rgba(120, 60, 200, 0.45),
+      inset 0 0 20px rgba(200, 140, 255, 0.2);
+  }
+  .sw-card.moon:hover .sw-company-name {
+    color: #e4ccff;
+    text-shadow: 0 0 10px rgba(210, 160, 255, 1), 0 0 25px rgba(180, 120, 240, 0.85), 0 0 45px rgba(140, 80, 220, 0.6);
+  }
+  .sw-card.moon:hover .sw-desc { color: #e0d5f0; }
+
+  /* 🟡 HUNTER — золотой */
+  .sw-card.hunter:hover .sw-emblem {
+    background: #5e503d;
+    border-color: #f0d888;
+    box-shadow:
+      0 0 0 3px var(--bg-dark), 0 0 0 5px #e8c86a,
+      0 0 25px rgba(255, 230, 120, 0.9),
+      0 0 60px rgba(230, 200, 80, 0.65),
+      0 0 100px rgba(200, 170, 60, 0.45),
+      inset 0 0 20px rgba(255, 240, 140, 0.2);
+  }
+  .sw-card.hunter:hover .sw-company-name {
+    color: #fff4cc;
+    text-shadow: 0 0 10px rgba(255, 240, 160, 1), 0 0 25px rgba(240, 220, 120, 0.85), 0 0 45px rgba(220, 190, 80, 0.6);
+  }
+  .sw-card.hunter:hover .sw-desc { color: #f0ead5; }
+
   .sw-company-name {
-    color: var(--accent-light);
-    font-size: 1.2em; font-weight: bold;
+    color: #e0e0e0;
+    font-size: 1.2em;
+    font-weight: bold;
     margin-bottom: 20px;
     letter-spacing: 0.03em;
-    transition: all 0.6s ease;
+    transition: color 0.6s ease, text-shadow 0.6s ease;
   }
-  .sw-card-link:hover .sw-company-name { color: var(--accent-bright); text-shadow: 0 0 15px rgba(var(--accent-rgb), 1); }
-  .sw-desc { color: #b0b0b0; font-size: 0.95em; line-height: 1.7; text-align: left; padding: 0 5px; }
+  .sw-desc {
+    color: #b0b0b0;
+    font-size: 0.95em;
+    line-height: 1.7;
+    text-align: left;
+    padding: 0 5px;
+    transition: color 0.6s ease;
+  }
 
-  /* Ссылки в блоке "Полезные ссылки" */
+  /* ═══ ПОЛЕЗНЫЕ ССЫЛКИ ═══ */
   .sw-links-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; max-width: 1600px; margin: 0 auto; }
-  .sw-link-cell { display: flex; align-items: center; justify-content: center; padding: 35px 20px; border-bottom: 1px solid rgba(var(--accent-rgb), 0.2); }
+  .sw-link-cell { display: flex; align-items: center; justify-content: center; padding: 35px 20px; border-bottom: 1px solid rgba(var(--accent-rgb), 0.2); position: relative; }
   .sw-link-cell:nth-child(n+7) { border-bottom: none; }
   .sw-link-cell:not(:nth-child(3n))::after { content: ''; position: absolute; right: 0; top: 25%; height: 50%; width: 1px; background: rgba(var(--accent-rgb), 0.2); }
   .sw-link-btn {
@@ -269,7 +367,7 @@
     transform: translateY(-2px);
   }
 
-  /* Командование */
+  /* ═══ КОМАНДОВАНИЕ ═══ */
   .sw-command-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 60px; max-width: 1400px; margin: 0 auto; }
   .sw-command-card { text-align: center; }
   .sw-command-photo {
@@ -290,17 +388,11 @@
   }
   .sw-command-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; transition: filter 0.7s ease, transform 0.7s ease; }
   .sw-command-card:hover .sw-command-photo img { filter: brightness(1.15); transform: scale(1.05); }
-  .sw-command-name {
-    color: var(--accent-bright);
-    font-size: 1.6em; font-weight: 600;
-    margin-bottom: 25px;
-    font-family: 'Georgia', serif;
-    transition: all 0.6s ease;
-  }
+  .sw-command-name { color: var(--accent-bright); font-size: 1.6em; font-weight: 600; margin-bottom: 25px; font-family: 'Georgia', serif; transition: all 0.6s ease; }
   .sw-command-card:hover .sw-command-name { text-shadow: 0 0 20px rgba(var(--accent-rgb), 1); }
   .sw-command-bio { color: #c0c0c0; font-size: 0.98em; line-height: 1.75; text-align: left; padding: 0 20px; }
 
-  /* Галерея */
+  /* ═══ ГАЛЕРЕЯ ═══ */
   .sw-gallery-wrap { background: var(--bg-dark); padding: 60px 40px 80px; }
   .sw-gallery { max-width: 1000px; margin: 0 auto; }
   .sw-gallery-stage {
@@ -360,7 +452,7 @@
 </head>
 <body>
 
-<!-- ═══════ НАВИГАЦИЯ — ЛОКАЛЬНЫЕ ССЫЛКИ ═══════ -->
+<!-- ═══════ НАВИГАЦИЯ ═══════ -->
 <nav class="holo-nav">
   <a href="index.html" class="holo-btn active">
     <span class="shine"></span>
@@ -440,7 +532,7 @@
     </div>
   </div>
 
-  <!-- БЛОК 2 — СТРУКТУРА БАТАЛЬОНА -->
+  <!-- БЛОК 2 — СТРУКТУРА БАТАЛЬОНА (полные тексты + свои цвета) -->
   <div class="sw-block">
     <div class="sw-inner">
       <div class="sw-banner">
@@ -450,28 +542,32 @@
       <div class="sw-content-block">
         <div class="sw-grid-4">
 
-          <a class="sw-card-link" href="cerberus.html">
+          <!-- 🔵 CERBERUS -->
+          <a class="sw-card cerberus" href="cerberus.html">
             <div class="sw-emblem"><img src="https://i.imgur.com/d1dhDp7.png" alt="Cerberus"></div>
             <div class="sw-company-name">Рота "Cerberus"</div>
-            <div class="sw-desc">Штурмовая рота. Авангард, медики, внезапные налёты. Первые встречают противника.</div>
+            <div class="sw-desc">Хочешь биться в авангарде и первым встречать противника? Жечь всё и вся? Стать первоклассным медиком, что спасает жизни на передовой? Или совершать внезапные налёты на головы растерянных противников? Рота Cerberus готова принять тебя в свои ряды!</div>
           </a>
 
-          <a class="sw-card-link" href="fenrir.html">
+          <!-- 🟢 FENRIR -->
+          <a class="sw-card fenrir" href="fenrir.html">
             <div class="sw-emblem"><img src="https://i.imgur.com/KDS4bpF.png" alt="Fenrir"></div>
             <div class="sw-company-name">Рота "Fenrir"</div>
-            <div class="sw-desc">Разведка, диверсии, ассасины. Работают в тылу врага.</div>
+            <div class="sw-desc">Рота Fenrir подойдёт любителям «поострее». Наши разведчики начинают работу задолго до основных сил, всегда будучи на шаг впереди неприятеля. А если изголодались по адреналину — ассасины к вашим услугам! Эта диверсионная группа обезвредит ключевые цели и создаст неразбериху в кратчайшие сроки.</div>
           </a>
 
-          <a class="sw-card-link" href="msc.html">
+          <!-- 🟣 MOON -->
+          <a class="sw-card moon" href="msc.html">
             <div class="sw-emblem"><img src="https://i.imgur.com/XhOdc65.png" alt="Moon Special Company"></div>
             <div class="sw-company-name">Отряд "Moon Special Company"</div>
-            <div class="sw-desc">Спецназ. Освобождение заложников, работа с террористами.</div>
+            <div class="sw-desc">Отряд спецназначения Moon Special Company — настоящий «гуманитарный» спецназ. Ударные клоны, как обоюдно острый клинок, поддерживают дисциплину и дух бойцов на должном уровне, а на спасательных операциях напрямую работают с террористами и проводят освобождение заложников.</div>
           </a>
 
-          <a class="sw-card-link" href="hunter.html">
+          <!-- 🟡 HUNTER -->
+          <a class="sw-card hunter" href="hunter.html">
             <div class="sw-emblem"><img src="https://i.imgur.com/qpdeVxS.png" alt="Hunter"></div>
             <div class="sw-company-name">Эскадрилья "Hunter"</div>
-            <div class="sw-desc">Асы воздуха. Господство в небе, огневая поддержка с воздуха.</div>
+            <div class="sw-desc">Небу тоже нужны свои покровители, а потому асы эскадрильи Hunter без устали оттачивают навыки владения воздушной техникой. Словно гром среди ясного неба, наши пилоты разят противника как в воздухе, так и на земле.</div>
           </a>
 
         </div>
@@ -564,16 +660,13 @@
     const dotsContainer = document.getElementById('galleryDots');
     const counter = document.getElementById('galleryCounter');
     let current = 0;
-
     slides.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.className = 'sw-gallery-dot' + (i === 0 ? ' active' : '');
       dot.addEventListener('click', () => goTo(i));
       dotsContainer.appendChild(dot);
     });
-
     const dots = document.querySelectorAll('.sw-gallery-dot');
-
     function goTo(index) {
       slides[current].classList.remove('active');
       dots[current].classList.remove('active');
@@ -582,7 +675,6 @@
       dots[current].classList.add('active');
       counter.textContent = (current + 1) + ' / ' + slides.length;
     }
-
     window.galleryNext = function() { goTo(current + 1); };
     window.galleryPrev = function() { goTo(current - 1); };
   })();
